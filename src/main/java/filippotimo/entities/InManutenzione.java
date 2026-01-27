@@ -65,5 +65,15 @@ this.idMezzoPubblico = idMezzo;
     public void setIdMezzoPubblico(MezzoPubblico idMezzoPubblico) {
         this.idMezzoPubblico = idMezzoPubblico;
     }
+
+    @Override
+    public String toString() {
+        return "InManutenzione{" +
+                "idManutenzione=" + idManutenzione +
+                ", dataInizio=" + dataInizio +
+                ", dataFine=" + dataFine +
+                ", MezzoPubblico=" + idMezzoPubblico +
+                '}';
+    }
 }
 
