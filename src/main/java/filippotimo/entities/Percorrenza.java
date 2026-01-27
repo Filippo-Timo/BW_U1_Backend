@@ -17,6 +17,10 @@ public class Percorrenza {
    @JoinColumn(name="tratta_id",nullable = false)
     private Tratta tratta;
 
+   @ManyToOne
+   @JoinColumn(name = "id_mezzo_pubblico", nullable = false)
+   private MezzoPubblico idMezzo;
+
 
    protected Percorrenza(){}
 
