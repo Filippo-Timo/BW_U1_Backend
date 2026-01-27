@@ -1,17 +1,20 @@
 package filippotimo.entities;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "rivenditori")
-public class Rivenditore {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "tipo_venditore")
+public abstract class Rivenditore {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,16 +23,11 @@ public class Rivenditore {
 	@Column(nullable = false)
 	private String nome;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "tipo_venditore", nullable = false)
-	private TipoVenditore tipoVenditore;
-
-	public Rivenditore() {
+	protected Rivenditore() {
 	}
 
-	public Rivenditore(String nome, TipoVenditore tipoVenditore) {
+	protected Rivenditore(String nome) {
 		this.nome = nome;
-		this.tipoVenditore = tipoVenditore;
 	}
 
 	public Long getId() {
@@ -47,12 +45,5 @@ public class Rivenditore {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
-	public TipoVenditore getTipoVenditore() {
-		return tipoVenditore;
-	}
-
-	public void setTipoVenditore(TipoVenditore tipoVenditore) {
-		this.tipoVenditore = tipoVenditore;
-	}
 }
+
