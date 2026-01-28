@@ -1,6 +1,7 @@
 package filippotimo.entities;
 
 import jakarta.persistence.*;
+
 @Entity
 @Table(name = "mezzi_pubblici")
 public class MezzoPubblico {
@@ -16,12 +17,14 @@ public class MezzoPubblico {
     @Enumerated(EnumType.STRING)
     private tipoMezzo tipoMezzo;
 
-//    costruttore vuoto per JPA
-    public MezzoPubblico(){}
-    public MezzoPubblico(String nomeMezzo, tipoMezzo tipoMezzo){
-        this.nomeMezzo =  nomeMezzo;
-        this.tipoMezzo =  tipoMezzo;
-        if(tipoMezzo == filippotimo.entities.tipoMezzo.AUTOBUS) {
+    //    costruttore vuoto per JPA
+    public MezzoPubblico() {
+    }
+
+    public MezzoPubblico(String nomeMezzo, tipoMezzo tipoMezzo) {
+        this.nomeMezzo = nomeMezzo;
+        this.tipoMezzo = tipoMezzo;
+        if (tipoMezzo == filippotimo.entities.tipoMezzo.AUTOBUS) {
             this.posti = 100;
         } else {
             this.posti = 220;

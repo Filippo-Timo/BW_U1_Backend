@@ -4,8 +4,10 @@ import filippotimo.entities.*;
 import filippotimo.exceptions.IdNotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class ProdottoDAO {
 
@@ -87,5 +89,35 @@ public class ProdottoDAO {
 
         System.out.println("Il prodotto con id = " + idProdotto + " è stato eliminato correttamente");
     }
+
+    //    *************************************** FIND ALL ABBONAMENTI E BIGLIETTI IN UN DETERMINATO LASSO DI TEMPO ***************************************
+
+    public List<Prodotto> findAllInAPeriodOfTime(long idRivenditore, LocalDate dataDiPartenza, LocalDate dataDiFine) {
+
+        TypedQuery<Prodotto> result = em.createQuery("SELECT p FROM Prodotto p WHERE p.idRivenditore = :idRivenditore AND p.dataDiPartenza >= :dataDiPartenza  AND p.dataDiFine <= :dataDiFine", Prodotto.class);
+        result.setParameter("idRivenditore", idRivenditore);
+        result.setParameter("dataDiPartenza", dataDiPartenza);
+        result.setParameter("dataDiFine", dataDiFine);
+
+
+        return result.getResultList();
+    }
+
+    ;
+
+    //    *************************************** COUNT ABBONAMENTI E BIGLIETTI IN UN DETERMINATO LASSO DI TEMPO ***************************************
+
+    public long countAllInAPeriodOfTime(long idRivenditore, LocalDate dataDiPartenza, LocalDate dataDiFine) {
+
+        TypedQuery<Long> result = em.createQuery("SELECT COUNT(p) FROM Prodotto p WHERE p.idRivenditore = :idRivenditore AND p.dataDiPartenza >= :dataDiPartenza  AND p.dataDiFine <= :dataDiFine", Long.class);
+        result.setParameter("idRivenditore", idRivenditore);
+        result.setParameter("dataDiPartenza", dataDiPartenza);
+        result.setParameter("dataDiFine", dataDiFine);
+
+
+        return result.getSingleResult();
+    }
+
+    ;
 
 }
