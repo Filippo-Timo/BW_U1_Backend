@@ -14,7 +14,7 @@ public class InManutenzione {
     private LocalDate dataInizio;
     @Column(name = "data_fine")
     private LocalDate dataFine;
-    @OneToOne
+    @ManyToMany
     @JoinColumn(name = "id_mezzo_pubblico", nullable = false)
     private MezzoPubblico idMezzoPubblico;
 //    classe vuota per JPA
