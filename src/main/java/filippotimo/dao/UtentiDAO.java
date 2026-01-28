@@ -15,7 +15,7 @@ public class UtentiDAO {
     public UtentiDAO(EntityManager em) {
         this.em = em;
     }
-    
+
     // creazione utente
     public Utenti creaUtente(String nome, String cognome) {
         Utenti utente = new Utenti(nome, cognome);
