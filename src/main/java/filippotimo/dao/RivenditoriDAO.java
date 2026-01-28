@@ -27,4 +27,29 @@ public class RivenditoriDAO {
 		em.close();
 		return r;
 	}
+
+	public void removeById(long id) {
+		EntityManager em = emf.createEntityManager();
+		EntityTransaction t = em.getTransaction();
+
+		t.begin();
+		Rivenditore r = em.find(Rivenditore.class, id);
+		if (r != null) {
+			em.remove(r);
+		}
+		t.commit();
+
+		em.close();
+	}
+
+	public void remove(Rivenditore r) {
+		EntityManager em = emf.createEntityManager();
+		EntityTransaction t = em.getTransaction();
+
+		t.begin();
+		em.remove(r);
+		t.commit();
+
+		em.close();
+	}
 }
