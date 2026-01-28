@@ -33,7 +33,7 @@ public class RivenditoriDAO {
 		final EntityTransaction t = em.getTransaction();
 
 		t.begin();
-		Rivenditore r = em.find(Rivenditore.class, id);
+		final Rivenditore r = em.find(Rivenditore.class, id);
 		if (r != null) {
 			em.remove(r);
 		}
