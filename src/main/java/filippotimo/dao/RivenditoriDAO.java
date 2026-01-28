@@ -52,4 +52,13 @@ public class RivenditoriDAO {
 
 		em.close();
 	}
+
+	public List<Rivenditore> findAll() {
+		EntityManager em = emf.createEntityManager();
+		List<Rivenditore> list = 
+			em.createQuery("SELECT r FROM Rivenditore r", Rivenditore.class)
+			.getResultList();
+		em.close();
+		return list;
+	}
 }
