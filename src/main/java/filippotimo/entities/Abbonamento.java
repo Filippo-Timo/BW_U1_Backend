@@ -1,8 +1,6 @@
 package filippotimo.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
@@ -16,17 +14,20 @@ public class Abbonamento extends Prodotto {
     @Column(name = "durata")
     private durataAbbonamento durataAbbonamento;
 
-    // ********************* COLLEGARE ID TESSERA *********************
-    //    private Tessera idTessera;
+
+    @ManyToOne
+    @JoinColumn(name = "numero_tessera")
+    private Tessera idTessera;
+
 
     public Abbonamento() {
     }
 
-    public Abbonamento(LocalDate dataEmissione, long idRivenditore, LocalDate dataScadenza, durataAbbonamento durataAbbonamento, long idTessera) {
-        super(dataEmissione);
+    public Abbonamento(LocalDate dataEmissione, Rivenditore idRivenditore, LocalDate dataScadenza, durataAbbonamento durataAbbonamento, Tessera idTessera) {
+        super(dataEmissione, idRivenditore);
         this.dataScadenza = dataScadenza;
         this.durataAbbonamento = durataAbbonamento;
-//        this.idTessera = idTessera;
+        this.idTessera = idTessera;
     }
 
     public LocalDate getDataScadenza() {
@@ -45,16 +46,20 @@ public class Abbonamento extends Prodotto {
         this.durataAbbonamento = durataAbbonamento;
     }
 
-//    public Tessera getIdTessera() {
-//        return idTessera;
-//    }
+    public Tessera getIdTessera() {
+        return idTessera;
+    }
+
+    public void setIdTessera(Tessera idTessera) {
+        this.idTessera = idTessera;
+    }
 
     @Override
     public String toString() {
         return "Abbonamento {" +
                 "dataScadenza = " + dataScadenza +
                 ", durataAbbonamento = " + durataAbbonamento +
-//                ", idTessera = " + idTessera +
+                ", idTessera = " + idTessera +
                 '}' + super.toString();
     }
 }
