@@ -6,6 +6,18 @@
     <persistence-unit name="bw1backendpu">
 
         <!--        TODO: inserire tutte le classi-->
+        <class>filippotimo.entities.Prodotto</class>
+        <class>filippotimo.entities.Abbonamento</class>
+        <class>filippotimo.entities.Biglietto</class>
+        <class>filippotimo.entities.MezzoPubblico</class>
+        <class>filippotimo.entities.InManutenzione</class>
+        <class>filippotimo.entities.Percorrenza</class>
+        <class>filippotimo.entities.Rivenditore</class>
+        <class>filippotimo.entities.RivenditoreAutomatico</class>
+        <class>filippotimo.entities.RivenditoreAutorizzato</class>
+        <class>filippotimo.entities.Tessera</class>
+        <class>filippotimo.entities.Tratta</class>
+        <class>filippotimo.entities.Utenti</class>
 
         <properties>
             <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/bw1backend"/>
