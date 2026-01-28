@@ -6,19 +6,20 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 
+import java.util.List;
+
 public class RivenditoriDAO {
 	private final EntityManagerFactory emf = Application.getEntityManagerFactory();
+
 	public void save(Rivenditore r) {
 		final EntityManager em = emf.createEntityManager();
 		final EntityTransaction t = em.getTransaction();
 
-		/* inizio transazione db*/
 		t.begin();
-		/* salva rinvednti*/
 		em.persist(r);
-
 		t.commit();
-		em.close()
+
+		em.close();
 	}
 
 	public Rivenditore findById(long id) {
@@ -38,25 +39,29 @@ public class RivenditoriDAO {
 			em.remove(r);
 		}
 		t.commit();
-		em.close()
+
+		em.close();
 	}
 
 	public void remove(Rivenditore r) {
+		final EntityManager em = emf.createEntityManager();
 		final EntityTransaction t = em.getTransaction();
 
 		t.begin();
-		em.remove(r);
+		if (em.contains(r)) {
+			em.remove(r);
+		}
 		t.commit();
-		em.close()
 
+		em.close();
 	}
 
 	public List<Rivenditore> findAll() {
 		final EntityManager em = emf.createEntityManager();
-		final List<Rivenditore> list = 
-			em.createQuery("SELECT r FROM Rivenditore r", Rivenditore.class)
+		final List<Rivenditore> list = em
+			.createQuery("SELECT r FROM Rivenditore r", Rivenditore.class)
 			.getResultList();
-		em.close()
+		em.close();
 		return list;
 	}
 }
