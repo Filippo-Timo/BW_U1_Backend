@@ -38,5 +38,13 @@ public abstract class Rivenditore {
     public void setNome(String nome) {
         this.nome = nome;
     }
+
+    @Override
+    public String toString() {
+        return "Rivenditore { " +
+                "id = " + id +
+                ", nome = " + nome + '\'' +
+                '}';
+    }
 }
 
