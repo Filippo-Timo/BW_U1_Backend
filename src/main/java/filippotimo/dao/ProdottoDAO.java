@@ -76,7 +76,6 @@ public class ProdottoDAO {
     public void findByIdAndDeleted(long idProdotto) {
 
         Prodotto found = this.findById(idProdotto);
-        if (found == null) throw new IdNotFoundException(idProdotto);
 
         EntityTransaction transaction = em.getTransaction();
 
