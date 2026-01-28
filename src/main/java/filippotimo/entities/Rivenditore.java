@@ -5,7 +5,12 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "rivenditori")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "tipo_venditore")
+@DiscriminatorColumn(
+    name = "tipo_venditore",
+    discriminatorType = DiscriminatorType.STRING,
+    length = 16 // 16 e' abbastanza capiente per "automatico" (10) e "autorizzato" (10)
+)
+
 public abstract class Rivenditore {
 
     @Id
@@ -38,5 +43,19 @@ public abstract class Rivenditore {
     public void setNome(String nome) {
         this.nome = nome;
     }
-}
 
+    @Override
+    public String toString() {
+        return "Rivenditore { id = " + id + ", nome = '" + nome + "' }";
+    }
+
+    public String getTipoLabel() {
+        if (this instanceof RivenditoreAutomatico) {
+            return "automatico";
+        }
+        if (this instanceof RivenditoreAutorizzato) {
+            return "autorizzato";
+        }
+        throw new IllegalStateException("Tipo rivenditore non supportato: " + getClass().getName());
+    }
+}

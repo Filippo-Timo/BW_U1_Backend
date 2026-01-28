@@ -1,15 +1,51 @@
 package filippotimo;
 
+import filippotimo.dao.MezzoPubblicoDAO;
+import filippotimo.dao.ProdottoDAO;
+import filippotimo.entities.MezzoPubblico;
+import filippotimo.entities.tipoMezzo;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 public class Application {
 
-    private static final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("bw1backendpu");
+    private static EntityManagerFactory entityManagerFactory;
 
+    public static EntityManagerFactory getEntityManagerFactory() {
+        if (entityManagerFactory == null) {
+            entityManagerFactory = Persistence.createEntityManagerFactory("bw1backendpu");
+        }
+        return entityManagerFactory;
+    }
+
+    public static void shutdown() {
+        if (entityManagerFactory != null) {
+            entityManagerFactory.close();
+            entityManagerFactory = null;
+        }
+    }
 
     public static void main(String[] args) {
+        EntityManager em = getEntityManagerFactory().createEntityManager();
 
-        System.out.println("Hello World!");
+        MezzoPubblicoDAO md = new MezzoPubblicoDAO(em);
+        ProdottoDAO pd = new ProdottoDAO(em);
+
+//        Rivenditore riv1 = new RivenditoreAutorizzato("Geppetto");
+//
+//        MezzoPubblico mez1 = new MezzoPubblico("carmelo", tipoMezzo.AUTOBUS);
+//
+//        Biglietto biglietto1 = new Biglietto(LocalDate.of(2026, 1, 12), riv1, tipoMezzo.AUTOBUS, null, mez1);
+//
+//        System.out.println(biglietto1);
+
+        MezzoPubblico primoMezzo = new MezzoPubblico("AA 123 BB", tipoMezzo.AUTOBUS);
+//        md.saveMezzoPubblico(primoMezzo);
+
+//        md.createAndSaveMezzoPubblico("CC 456 DD", tipoMezzo.TRAM);
+
+        em.close();
+        shutdown();
     }
 }
