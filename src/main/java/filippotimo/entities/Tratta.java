@@ -9,7 +9,6 @@ import jakarta.persistence.*;
 public class Tratta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="tratta_id")
     private long id;
 
      @Column(name="nome_tratta",nullable = false)
