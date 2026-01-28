@@ -17,15 +17,17 @@ public abstract class Prodotto {
     @Column(name = "data_emissione", nullable = false)
     private LocalDate dataEmissione;
 
-    // ********************* COLLEGARE ID RIVENDITORE *********************
-    //    private Rivenditore idRivenditore;
+
+    @ManyToOne
+    @JoinColumn(name = "id_rivenditore")
+    private Rivenditore idRivenditore;
 
     public Prodotto() {
     }
 
-    public Prodotto(LocalDate dataEmissione) {
+    public Prodotto(LocalDate dataEmissione, Rivenditore idRivenditore) {
         this.dataEmissione = dataEmissione;
-        //        this.idRivenditore = idRivenditore;
+        this.idRivenditore = idRivenditore;
     }
 
     public Long getIdProdotto() {
@@ -40,20 +42,20 @@ public abstract class Prodotto {
         this.dataEmissione = dataEmissione;
     }
 
-//    public Rivenditore getIdRivenditore() {
-//        return idRivenditore;
-//    }
-//
-//    public void setIdRivenditore(long idRivenditore) {
-//        this.idRivenditore = idRivenditore;
-//    }
+    public Rivenditore getIdRivenditore() {
+        return idRivenditore;
+    }
+
+    public void setIdRivenditore(Rivenditore idRivenditore) {
+        this.idRivenditore = idRivenditore;
+    }
 
     @Override
     public String toString() {
         return "Prodotto {" +
                 "idProdotto = " + idProdotto +
                 ", dataEmissione = " + dataEmissione +
-//                ", idRivenditore = " + idRivenditore +
+                ", idRivenditore = " + idRivenditore +
                 '}';
     }
 }

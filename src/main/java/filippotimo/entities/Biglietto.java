@@ -15,18 +15,20 @@ public class Biglietto extends Prodotto {
     @Column(name = "data_vidimazione")
     private LocalDate dataVidimazione;
 
-    // ********************* COLLEGARE ID MEZZO *********************
-    //    private Mezzo idMezzo;
+
+    @ManyToOne
+    @JoinColumn(name = "id_mezzo_pubblico")
+    private MezzoPubblico idMezzo;
 
 
     public Biglietto() {
     }
 
-    public Biglietto(LocalDate dataEmissione, tipoMezzo tipoMezzo, LocalDate dataVidimazione) {
-        super(dataEmissione);
+    public Biglietto(LocalDate dataEmissione, Rivenditore idRivenditore, tipoMezzo tipoMezzo, LocalDate dataVidimazione, MezzoPubblico idMezzo) {
+        super(dataEmissione, idRivenditore);
         this.tipoMezzo = tipoMezzo;
         this.dataVidimazione = null;
-        //        this.idMezzo = idMezzo;
+        this.idMezzo = idMezzo;
     }
 
     public tipoMezzo getTipoMezzo() {
@@ -45,16 +47,20 @@ public class Biglietto extends Prodotto {
         this.dataVidimazione = dataVidimazione;
     }
 
-//    public Mezzo getIdMezzo() {
-//        return idMezzo;
-//    }
+    public MezzoPubblico getIdMezzo() {
+        return idMezzo;
+    }
+
+    public void setIdMezzo(MezzoPubblico idMezzo) {
+        this.idMezzo = idMezzo;
+    }
 
     @Override
     public String toString() {
         return "Biglietto {" +
                 "tipoMezzo = " + tipoMezzo +
                 ", dataVidimazione = " + dataVidimazione +
-//                ", idMezzo = " + idMezzo +
+                ", idMezzo = " + idMezzo +
                 '}' + super.toString();
     }
 }

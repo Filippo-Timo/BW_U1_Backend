@@ -1,6 +1,7 @@
 package filippotimo.entities;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDate;
 
 @Entity
@@ -9,6 +10,7 @@ public class Tessera {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "numero_tessera")
     private Long numeroTessera;
 
     @ManyToOne
@@ -22,7 +24,8 @@ public class Tessera {
     private LocalDate dataScadenza;
 
     // costruttori
-    public Tessera() {}
+    public Tessera() {
+    }
 
     public Tessera(Utenti utente, LocalDate dataEmissione, LocalDate dataScadenza) {
         this.utente = utente;
