@@ -8,8 +8,8 @@ import jakarta.persistence.EntityTransaction;
 
 public class RivenditoriDAO {
 	private final EntityManagerFactory emf = Application.getEntityManagerFactory();
+	private final EntityManager em = emf.createEntityManager();
 	public void save(Rivenditore r) {
-		EntityManager em = emf.createEntityManager();
 		EntityTransaction t = em.getTransaction();
 
 		/* inizio transazione db*/
@@ -22,14 +22,12 @@ public class RivenditoriDAO {
 	}
 
 	public Rivenditore findById(long id) {
-		EntityManager em = emf.createEntityManager();
 		Rivenditore r = em.find(Rivenditore.class, id);
 		em.close();
 		return r;
 	}
 
 	public void removeById(long id) {
-		EntityManager em = emf.createEntityManager();
 		EntityTransaction t = em.getTransaction();
 
 		t.begin();
@@ -43,7 +41,6 @@ public class RivenditoriDAO {
 	}
 
 	public void remove(Rivenditore r) {
-		EntityManager em = emf.createEntityManager();
 		EntityTransaction t = em.getTransaction();
 
 		t.begin();
@@ -54,7 +51,6 @@ public class RivenditoriDAO {
 	}
 
 	public List<Rivenditore> findAll() {
-		EntityManager em = emf.createEntityManager();
 		List<Rivenditore> list = 
 			em.createQuery("SELECT r FROM Rivenditore r", Rivenditore.class)
 			.getResultList();
