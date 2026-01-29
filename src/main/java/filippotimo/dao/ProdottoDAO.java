@@ -32,9 +32,9 @@ public class ProdottoDAO {
 
     //    *************************************** CREATE AND SAVE (biglietto) ***************************************
 
-    public void createAndSaveBiglietto(LocalDate dataEmissione, Rivenditore idRivenditore, tipoMezzo tipoMezzo, LocalDate dataVidimazione, MezzoPubblico idMezzo) {
+    public void createAndSaveBiglietto(LocalDate dataEmissione, Rivenditore idRivenditore, tipoMezzo tipoMezzo, MezzoPubblico idMezzo) {
 
-        Biglietto newBiglietto = new Biglietto(dataEmissione, idRivenditore, tipoMezzo, dataVidimazione, idMezzo);
+        Biglietto newBiglietto = new Biglietto(dataEmissione, idRivenditore, tipoMezzo, idMezzo);
 
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
@@ -51,7 +51,7 @@ public class ProdottoDAO {
 
     public void createAndSaveAbbonamento(LocalDate dataEmissione, Rivenditore idRivenditore, LocalDate dataScadenza, durataAbbonamento durataAbbonamento, Tessera idTessera) {
 
-        Abbonamento newAbbonamento = new Abbonamento(dataEmissione, idRivenditore, dataScadenza, durataAbbonamento, idTessera);
+        Abbonamento newAbbonamento = new Abbonamento(dataEmissione, idRivenditore, durataAbbonamento, idTessera);
 
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
@@ -75,7 +75,7 @@ public class ProdottoDAO {
 
     //    *************************************** FIND BY ID AND DELETE ***************************************
 
-    public void findByIdAndDeleted(long idProdotto) {
+    public void findByIdAndDelete(long idProdotto) {
 
         Prodotto found = this.findById(idProdotto);
 
@@ -94,7 +94,7 @@ public class ProdottoDAO {
 
     public List<Prodotto> findAllInAPeriodOfTime(long idRivenditore, LocalDate dataDiPartenza, LocalDate dataDiFine) {
 
-        TypedQuery<Prodotto> result = em.createQuery("SELECT p FROM Prodotto p WHERE p.idRivenditore.id = :idRivenditore AND p.dataDiPartenza >= :dataDiPartenza  AND p.dataDiFine <= :dataDiFine", Prodotto.class);
+        TypedQuery<Prodotto> result = em.createQuery("SELECT p FROM Prodotto p WHERE p.idRivenditore.id = :idRivenditore AND p.dataEmissione >= :dataDiPartenza  AND p.dataEmissione <= :dataDiFine", Prodotto.class);
         result.setParameter("idRivenditore", idRivenditore);
         result.setParameter("dataDiPartenza", dataDiPartenza);
         result.setParameter("dataDiFine", dataDiFine);
@@ -107,7 +107,7 @@ public class ProdottoDAO {
 
     public long countAllProductsInAPeriodOfTime(long idRivenditore, LocalDate dataDiPartenza, LocalDate dataDiFine) {
 
-        TypedQuery<Long> result = em.createQuery("SELECT COUNT(p) FROM Prodotto p WHERE p.idRivenditore.id = :idRivenditore AND p.dataDiPartenza >= :dataDiPartenza  AND p.dataDiFine <= :dataDiFine", Long.class);
+        TypedQuery<Long> result = em.createQuery("SELECT COUNT(p) FROM Prodotto p WHERE p.idRivenditore.id = :idRivenditore AND p.dataEmissione >= :dataDiPartenza  AND p.dataEmissione <= :dataDiFine", Long.class);
         result.setParameter("idRivenditore", idRivenditore);
         result.setParameter("dataDiPartenza", dataDiPartenza);
         result.setParameter("dataDiFine", dataDiFine);
@@ -116,24 +116,24 @@ public class ProdottoDAO {
     }
 
     //    *************************************** METODO PER VIDIMARE UN BIGLIETTO ***************************************
-    //    (setDataVidimazione = LocalDate.now)
-
-    public Biglietto validateATicket(Biglietto bigliettoDaValidare) {
-
+    
+    public void validateATicketBySetter(long idBiglietto) {
+        EntityTransaction tr = em.getTransaction();
         LocalDate today = LocalDate.now();
-
-        TypedQuery<Biglietto> result = em.createQuery("UPDATE Biglietto b SET b.dataVidimazione = :today WHERE b.getIdProdotto = bigliettoDaValidare.idProdotto", Biglietto.class);
-        result.setParameter("bigliettoDaValidare", bigliettoDaValidare);
-        result.setParameter("today", today);
-
-        return result.getSingleResult();
+        tr.begin();
+        Biglietto bigliettoDaVidimare = (Biglietto) findById(idBiglietto);
+        bigliettoDaVidimare.setDataVidimazione(today);
+        tr.commit();
+        System.out.println("La vidimazione del biglietto " + bigliettoDaVidimare + " è stata aggiornato con la data " + today.toString());
     }
 
     //    *************************************** COUNT IL NUMERO DI BIGLIETTI VIDIMATI IN UN DETERMINATO LASSO DI TEMPO ***************************************
 
     public long countAllValidatesInAPeriodOfTime(LocalDate dataDiPartenza, LocalDate dataDiFine) {
 
-        TypedQuery<Long> result = em.createQuery("SELECT COUNT(b) FROM Biglietto b WHERE b.dataVidimazione IS NOT NULL AND b.dataVidimazione BETWEEN :dataDiPartenza  AND :dataDiFine", Long.class);
+        TypedQuery<Long> result = em.createQuery("SELECT COUNT(b) FROM Biglietto b " +
+                "WHERE b.dataVidimazione IS NOT NULL " +
+                "AND b.dataVidimazione BETWEEN :dataDiPartenza  AND :dataDiFine", Long.class);
         result.setParameter("dataDiPartenza", dataDiPartenza);
         result.setParameter("dataDiFine", dataDiFine);
 
@@ -144,7 +144,9 @@ public class ProdottoDAO {
 
     public List<Biglietto> findAllValidatesInAPeriodOfTime(LocalDate dataDiPartenza, LocalDate dataDiFine) {
 
-        TypedQuery<Biglietto> result = em.createQuery("SELECT b FROM Biglietto b WHERE b.dataVidimazione IS NOT NULL AND b.dataVidimazione BETWEEN :dataDiPartenza  AND :dataDiFine", Biglietto.class);
+        TypedQuery<Biglietto> result = em.createQuery("SELECT b FROM Biglietto b " +
+                "WHERE b.dataVidimazione IS NOT NULL " +
+                "AND b.dataVidimazione BETWEEN :dataDiPartenza  AND :dataDiFine", Biglietto.class);
         result.setParameter("dataDiPartenza", dataDiPartenza);
         result.setParameter("dataDiFine", dataDiFine);
 

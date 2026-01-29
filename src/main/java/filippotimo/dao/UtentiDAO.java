@@ -1,12 +1,14 @@
 package filippotimo.dao;
 
+import filippotimo.entities.Abbonamento;
 import filippotimo.entities.Tessera;
 import filippotimo.entities.Utenti;
+import filippotimo.exceptions.IdNotFoundException;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
+
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
 
 public class UtentiDAO {
 
@@ -16,99 +18,113 @@ public class UtentiDAO {
         this.em = em;
     }
 
+    //    *************************************** SAVE ***************************************
 
-    // creazione utente
-    public Utenti creaUtente(String nome, String cognome) {
-        Utenti utente = new Utenti(nome, cognome);
+    public void save(Utenti newUtenti) {
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
 
-        em.getTransaction().begin();
-        em.persist(utente);
-        em.getTransaction().commit();
+        em.persist(newUtenti);
 
-        return utente;
+        transaction.commit();
+
+        System.out.println("L'utente con id = " + newUtenti.getId() + " è stato salvato correttamente!");
     }
 
-    // ricerca utente by id
-    public Optional<Utenti> trovaUtenteById(Long id) {
-        return Optional.ofNullable(em.find(Utenti.class, id));
+    //    *************************************** CREATE AND SAVE (Utente) ***************************************
+
+    public void createAndSaveUtente(String nome, String cognome) {
+
+        Utenti newUtenti = new Utenti(nome, cognome);
+
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
+
+        em.persist(newUtenti);
+
+        transaction.commit();
+
+        System.out.println("L'utente con id = " + newUtenti.getId() + " è stato salvato correttamente!");
+
     }
 
-    // rimozione utente (rimuove anche le tessere grazie a cascade)
-    public boolean rimuoviUtente(Long id) {
-        Utenti utente = em.find(Utenti.class, id);
-        if (utente == null) return false;
+    //    *************************************** CREATE AND SAVE (Tessera) ***************************************
 
-        em.getTransaction().begin();
-        em.remove(utente);
-        em.getTransaction().commit();
+    public void createAndSaveTessera(Utenti utente, LocalDate dataEmissione) {
 
-        return true;
+        Tessera newTessera = new Tessera(utente, dataEmissione);
+
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
+
+        em.persist(newTessera);
+
+        transaction.commit();
+
+        System.out.println("La tessera con id = " + newTessera.getNumeroTessera() + " è stato salvato correttamente!");
+
     }
 
-    // tutti gli utenti
-    public List<Utenti> trovaTuttiUtenti() {
-        return em.createQuery("SELECT u FROM Utenti u", Utenti.class)
-                .getResultList();
+    //    *************************************** FIND UTENTE BY ID ***************************************
+
+    public Utenti findUtenteById(long idUtenti) {
+        Utenti found = em.find(Utenti.class, idUtenti);
+        if (found == null)
+            throw new IdNotFoundException(idUtenti);
+        return found;
     }
 
+    //    *************************************** FIND TESSERA BY NUMERO ***************************************
 
-
-    // creazione tessera
-    public Tessera creaTessera(Long idUtente, LocalDate emissione, LocalDate scadenza) {
-        Utenti utente = em.find(Utenti.class, idUtente);
-        if (utente == null)
-            throw new IllegalArgumentException("Utente non trovato");
-
-        Tessera tessera = new Tessera(utente, emissione, scadenza);
-
-        em.getTransaction().begin();
-        em.persist(tessera);
-        em.getTransaction().commit();
-
-        return tessera;
+    public Tessera findTesseraByNumero(long numeroTessera) {
+        Tessera found = em.find(Tessera.class, numeroTessera);
+        if (found == null)
+            throw new IdNotFoundException(numeroTessera);
+        return found;
     }
 
-    // ricerca tessera by id
-    public Optional<Tessera> trovaTesseraById(Long numeroTessera) {
-        return Optional.ofNullable(em.find(Tessera.class, numeroTessera));
+    //    *************************************** FIND UTENTE BY ID AND DELETE ***************************************
+
+    public void findUtenteByIdAndDelete(long idUtente) {
+
+        Utenti found = this.findUtenteById(idUtente);
+
+        EntityTransaction transaction = em.getTransaction();
+
+        transaction.begin();
+
+        em.remove(found);
+
+        transaction.commit();
+
+        System.out.println("L'utente con id = " + idUtente + " è stato eliminato correttamente");
     }
 
-    // rimozione tessera
-    public boolean rimuoviTessera(Long numeroTessera) {
-        Tessera tessera = em.find(Tessera.class, numeroTessera);
-        if (tessera == null) return false;
+    //    *************************************** FIND TESSERA BY NUMBER AND DELETE ***************************************
 
-        em.getTransaction().begin();
-        em.remove(tessera);
-        em.getTransaction().commit();
+    public void findTesseraByNumberAndDelete(long numeroTessera) {
 
-        return true;
+        Tessera found = this.findTesseraByNumero(numeroTessera);
+
+        EntityTransaction transaction = em.getTransaction();
+
+        transaction.begin();
+
+        em.remove(found);
+
+        transaction.commit();
+
+        System.out.println("La tessera con numero = " + numeroTessera + " è stato eliminato correttamente");
     }
 
-    // tutte le tessere di un utente
-    public List<Tessera> trovaTesserePerUtente(Long idUtente) {
-        TypedQuery<Tessera> q = em.createQuery(
-                "SELECT t FROM Tessera t WHERE t.utente.id = :id",
-                Tessera.class
-        );
-        q.setParameter("id", idUtente);
-        return q.getResultList();
+    //    *************************************** VERIFY Abbonamento BY Tessera ***************************************
+
+    public Abbonamento verifyAbbonamentoByTessera(long numeroTessera) {
+        TypedQuery<Abbonamento> a = em.createQuery("SELECT a FROM Abbonamento a WHERE a.numeroTessera.numeroTessera = :numeroTessera", Abbonamento.class);
+
+        a.setParameter("numeroTessera", numeroTessera);
+
+        return a.getSingleResult();
     }
 
-
-
-    // verifica di un abbonamento in base al numero di tessera
-    public boolean verificaAbbonamentoAttivo(Long numeroTessera) {
-        TypedQuery<Long> q = em.createQuery(
-                "SELECT COUNT(t) FROM Tessera t " +
-                        "WHERE t.numeroTessera = :num " +
-                        "AND t.dataScadenza >= :oggi",
-                Long.class
-        );
-
-        q.setParameter("num", numeroTessera);
-        q.setParameter("oggi", LocalDate.now());
-
-        return q.getSingleResult() > 0;
-    }
 }

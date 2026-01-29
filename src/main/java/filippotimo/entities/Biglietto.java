@@ -24,7 +24,7 @@ public class Biglietto extends Prodotto {
     public Biglietto() {
     }
 
-    public Biglietto(LocalDate dataEmissione, Rivenditore idRivenditore, tipoMezzo tipoMezzo, LocalDate dataVidimazione, MezzoPubblico idMezzo) {
+    public Biglietto(LocalDate dataEmissione, Rivenditore idRivenditore, tipoMezzo tipoMezzo, MezzoPubblico idMezzo) {
         super(dataEmissione, idRivenditore);
         this.tipoMezzo = tipoMezzo;
         this.dataVidimazione = null;

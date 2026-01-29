@@ -1,7 +1,6 @@
 package filippotimo.entities;
 
 import jakarta.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "utenti")
@@ -17,11 +16,9 @@ public class Utenti {
     @Column(nullable = false)
     private String cognome;
 
-    @OneToMany(mappedBy = "utente", cascade = CascadeType.ALL)
-    private List<Tessera> tessere;
-
     // costruttori
-    public Utenti() {}
+    public Utenti() {
+    }
 
     public Utenti(String nome, String cognome) {
         this.nome = nome;
@@ -49,12 +46,13 @@ public class Utenti {
         this.cognome = cognome;
     }
 
-    public List<Tessera> getTessere() {
-        return tessere;
-    }
-
-    public void setTessere(List<Tessera> tessere) {
-        this.tessere = tessere;
+    @Override
+    public String toString() {
+        return "Utenti { " +
+                "id = " + id +
+                ", nome = " + nome + '\'' +
+                ", cognome = " + cognome + '\'' +
+                '}';
     }
 }
 

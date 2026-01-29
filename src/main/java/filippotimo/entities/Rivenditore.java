@@ -6,9 +6,9 @@ import jakarta.persistence.*;
 @Table(name = "rivenditori")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(
-    name = "tipo_venditore",
-    discriminatorType = DiscriminatorType.STRING,
-    length = 16 // 16 e' abbastanza capiente per "automatico" (10) e "autorizzato" (10)
+        name = "tipo_venditore",
+        discriminatorType = DiscriminatorType.STRING,
+        length = 50 // 16 e' abbastanza capiente per "automatico" (10) e "autorizzato" (10)
 )
 
 public abstract class Rivenditore {

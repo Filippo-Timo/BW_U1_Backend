@@ -12,22 +12,29 @@ public class Abbonamento extends Prodotto {
     private LocalDate dataScadenza;
 
     @Column(name = "durata")
+    @Enumerated(EnumType.STRING)
     private durataAbbonamento durataAbbonamento;
 
 
     @ManyToOne
     @JoinColumn(name = "numero_tessera")
-    private Tessera idTessera;
+    private Tessera numeroTessera;
 
 
     public Abbonamento() {
     }
 
-    public Abbonamento(LocalDate dataEmissione, Rivenditore idRivenditore, LocalDate dataScadenza, durataAbbonamento durataAbbonamento, Tessera idTessera) {
+    public Abbonamento(LocalDate dataEmissione, Rivenditore idRivenditore, durataAbbonamento durataAbbonamento, Tessera idTessera) {
         super(dataEmissione, idRivenditore);
-        this.dataScadenza = dataScadenza;
         this.durataAbbonamento = durataAbbonamento;
-        this.idTessera = idTessera;
+        if (this.durataAbbonamento == filippotimo.entities.durataAbbonamento.SETTIMANALE) {
+            this.dataScadenza = dataEmissione.plusDays(7);
+        } else {
+            dataScadenza = dataEmissione.plusMonths(1);
+        }
+        ;
+
+        this.numeroTessera = idTessera;
     }
 
     public LocalDate getDataScadenza() {
@@ -46,12 +53,12 @@ public class Abbonamento extends Prodotto {
         this.durataAbbonamento = durataAbbonamento;
     }
 
-    public Tessera getIdTessera() {
-        return idTessera;
+    public Tessera getNumeroTessera() {
+        return numeroTessera;
     }
 
-    public void setIdTessera(Tessera idTessera) {
-        this.idTessera = idTessera;
+    public void setNumeroTessera(Tessera numeroTessera) {
+        this.numeroTessera = numeroTessera;
     }
 
     @Override
@@ -59,7 +66,7 @@ public class Abbonamento extends Prodotto {
         return "Abbonamento {" +
                 "dataScadenza = " + dataScadenza +
                 ", durataAbbonamento = " + durataAbbonamento +
-                ", idTessera = " + idTessera +
+                ", idTessera = " + numeroTessera +
                 '}' + super.toString();
     }
 }
