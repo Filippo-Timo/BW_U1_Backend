@@ -2,9 +2,12 @@ package filippotimo.dao;
 
 import filippotimo.Application;
 import filippotimo.entities.Rivenditore;
+import filippotimo.entities.RivenditoreAutomatico;
+import filippotimo.exceptions.NotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.NoResultException;
 
 import java.util.List;
 
@@ -63,5 +66,28 @@ public class RivenditoriDAO {
 			.getResultList();
 		em.close();
 		return list;
+	}
+
+	public void setInServizioRivenditoreAutomatico(long idRivenditore, boolean inServizio) {
+		final EntityManager em = emf.createEntityManager();
+		final EntityTransaction t = em.getTransaction();
+
+		try {
+			final RivenditoreAutomatico rivenditore = em
+				.createQuery(
+					"SELECT r FROM RivenditoreAutomatico r WHERE r.id = :id",
+					RivenditoreAutomatico.class
+				)
+				.setParameter("id", idRivenditore)
+				.getSingleResult();
+
+			t.begin();
+			rivenditore.setInServizio(inServizio);
+			t.commit();
+		} catch (NoResultException ex) {
+			throw new NotFoundException("Rivenditore automatico con id " + idRivenditore + " non trovato!");
+		} finally {
+			em.close();
+		}
 	}
 }
