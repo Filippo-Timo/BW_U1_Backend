@@ -10,12 +10,24 @@ import jakarta.persistence.Persistence;
 
 public class Application {
 
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("bw1backendpu");
+    private static EntityManagerFactory entityManagerFactory;
 
+    public static EntityManagerFactory getEntityManagerFactory() {
+        if (entityManagerFactory == null) {
+            entityManagerFactory = Persistence.createEntityManagerFactory("bw1backendpu");
+        }
+        return entityManagerFactory;
+    }
+
+    public static void shutdown() {
+        if (entityManagerFactory != null) {
+            entityManagerFactory.close();
+            entityManagerFactory = null;
+        }
+    }
 
     public static void main(String[] args) {
-
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = getEntityManagerFactory().createEntityManager();
 
         MezzoPubblicoDAO md = new MezzoPubblicoDAO(em);
         ProdottoDAO pd = new ProdottoDAO(em);
@@ -32,7 +44,8 @@ public class Application {
 //        md.saveMezzoPubblico(primoMezzo);
 
 //        md.createAndSaveMezzoPubblico("CC 456 DD", tipoMezzo.TRAM);
-        
 
+        em.close();
+        shutdown();
     }
 }

@@ -18,7 +18,7 @@ public class Tratta {
      @Column(name = "capolinea", nullable = false)
     private String capolinea;
      @Column(name="Tempo_perc_prev")
-    private int TempoPercPrev;
+    private int tempoPercPrev;
 
 
 
@@ -28,12 +28,12 @@ public class Tratta {
      protected Tratta(){}
 
 
-    protected Tratta(String nomeTratta,String luogoPartenza,String capolinea, int tempoPercPrev){
+    public Tratta(String nomeTratta,String luogoPartenza,String capolinea, int tempoPercPrev){
          this.nomeTratta= nomeTratta;
 
          this.luogoPartenza=luogoPartenza;
          this.capolinea= capolinea;
-         this.TempoPercPrev= tempoPercPrev;
+         this.tempoPercPrev = tempoPercPrev;
     }
 
     public long getId() {
@@ -65,7 +65,7 @@ public class Tratta {
     }
 
     public long getTempoPercPrev() {
-        return TempoPercPrev;
+        return tempoPercPrev;
     }
 
     @Override
@@ -75,7 +75,7 @@ public class Tratta {
                 ", nomeTratta='" + nomeTratta + '\'' +
                 ", luogoPartenza='" + luogoPartenza + '\'' +
                 ", capolinea='" + capolinea + '\'' +
-                ", TempoPercPrev=" + TempoPercPrev +
+                ", TempoPercPrev=" + tempoPercPrev +
                 '}';
     }
 }
