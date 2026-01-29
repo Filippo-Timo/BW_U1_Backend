@@ -47,4 +47,32 @@ class TrattaDAO {
 
 
 
+    public Double tempoMedioPerMezzoETratta(long mezzoId, long trattaId) {
+        return em.createQuery(
+                        "SELECT AVG(p.tempoPercorrenzaEffettivo) " +
+                                "FROM Percorrenza p " +
+                                "WHERE p.tratta.id = :trattaId " +
+                                "AND p.idMezzo.idMezzoPubblico = :mezzoId",
+                        Double.class
+                )
+                .setParameter("trattaId", trattaId)
+                .setParameter("mezzoId", mezzoId)
+                .getSingleResult();
+    }
+
+
+    public Long numeroPercorrenzePerMezzoETratta(long mezzoId, long trattaId) {
+        return em.createQuery(
+                        "SELECT COUNT(p) " +
+                                "FROM Percorrenza p " +
+                                "WHERE p.tratta.id = :trattaId " +
+                                "AND p.idMezzo.idMezzoPubblico = :mezzoId",
+                        Long.class
+                )
+                .setParameter("trattaId", trattaId)
+                .setParameter("mezzoId", mezzoId)
+                .getSingleResult();
+    }
+
+
 }
