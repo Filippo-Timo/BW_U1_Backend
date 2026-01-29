@@ -4,8 +4,10 @@ import filippotimo.entities.*;
 import filippotimo.exceptions.IdNotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class ProdottoDAO {
 
@@ -86,6 +88,67 @@ public class ProdottoDAO {
         transaction.commit();
 
         System.out.println("Il prodotto con id = " + idProdotto + " è stato eliminato correttamente");
+    }
+
+    //    *************************************** FIND ALL ABBONAMENTI E BIGLIETTI IN UN DETERMINATO LASSO DI TEMPO ***************************************
+
+    public List<Prodotto> findAllInAPeriodOfTime(long idRivenditore, LocalDate dataDiPartenza, LocalDate dataDiFine) {
+
+        TypedQuery<Prodotto> result = em.createQuery("SELECT p FROM Prodotto p WHERE p.idRivenditore.id = :idRivenditore AND p.dataDiPartenza >= :dataDiPartenza  AND p.dataDiFine <= :dataDiFine", Prodotto.class);
+        result.setParameter("idRivenditore", idRivenditore);
+        result.setParameter("dataDiPartenza", dataDiPartenza);
+        result.setParameter("dataDiFine", dataDiFine);
+
+
+        return result.getResultList();
+    }
+
+    //    *************************************** COUNT ABBONAMENTI E BIGLIETTI IN UN DETERMINATO LASSO DI TEMPO ***************************************
+
+    public long countAllProductsInAPeriodOfTime(long idRivenditore, LocalDate dataDiPartenza, LocalDate dataDiFine) {
+
+        TypedQuery<Long> result = em.createQuery("SELECT COUNT(p) FROM Prodotto p WHERE p.idRivenditore.id = :idRivenditore AND p.dataDiPartenza >= :dataDiPartenza  AND p.dataDiFine <= :dataDiFine", Long.class);
+        result.setParameter("idRivenditore", idRivenditore);
+        result.setParameter("dataDiPartenza", dataDiPartenza);
+        result.setParameter("dataDiFine", dataDiFine);
+
+        return result.getSingleResult();
+    }
+
+    //    *************************************** METODO PER VIDIMARE UN BIGLIETTO ***************************************
+    //    (setDataVidimazione = LocalDate.now)
+
+    public Biglietto validateATicket(Biglietto bigliettoDaValidare) {
+
+        LocalDate today = LocalDate.now();
+
+        TypedQuery<Biglietto> result = em.createQuery("UPDATE Biglietto b SET b.dataVidimazione = :today WHERE b.getIdProdotto = bigliettoDaValidare.idProdotto", Biglietto.class);
+        result.setParameter("bigliettoDaValidare", bigliettoDaValidare);
+        result.setParameter("today", today);
+
+        return result.getSingleResult();
+    }
+
+    //    *************************************** COUNT IL NUMERO DI BIGLIETTI VIDIMATI IN UN DETERMINATO LASSO DI TEMPO ***************************************
+
+    public long countAllValidatesInAPeriodOfTime(LocalDate dataDiPartenza, LocalDate dataDiFine) {
+
+        TypedQuery<Long> result = em.createQuery("SELECT COUNT(b) FROM Biglietto b WHERE b.dataVidimazione IS NOT NULL AND b.dataVidimazione BETWEEN :dataDiPartenza  AND :dataDiFine", Long.class);
+        result.setParameter("dataDiPartenza", dataDiPartenza);
+        result.setParameter("dataDiFine", dataDiFine);
+
+        return result.getSingleResult();
+    }
+
+    //    *************************************** FIND ALL BIGLIETTI VIDIMATI IN UN DETERMINATO LASSO DI TEMPO ***************************************
+
+    public List<Biglietto> findAllValidatesInAPeriodOfTime(LocalDate dataDiPartenza, LocalDate dataDiFine) {
+
+        TypedQuery<Biglietto> result = em.createQuery("SELECT b FROM Biglietto b WHERE b.dataVidimazione IS NOT NULL AND b.dataVidimazione BETWEEN :dataDiPartenza  AND :dataDiFine", Biglietto.class);
+        result.setParameter("dataDiPartenza", dataDiPartenza);
+        result.setParameter("dataDiFine", dataDiFine);
+
+        return result.getResultList();
     }
 
 }
