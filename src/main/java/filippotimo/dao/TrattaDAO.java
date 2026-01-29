@@ -69,6 +69,17 @@ public class TrattaDAO {
                 .setParameter("mezzoId", mezzoId)
                 .getSingleResult();
     }
-
+    public Double tempoMedioEffettivoTrattaMezzo(long trattaId, long mezzoId) {
+        return em.createQuery(
+                        "SELECT AVG(p.tempoPercorrenzaEffettivo) " +
+                                "FROM Percorrenza p " +
+                                "WHERE p.tratta.id = :trattaId " +
+                                "AND p.idMezzo.idMezzoPubblico = :mezzoId",
+                        Double.class
+                )
+                .setParameter("trattaId", trattaId)
+                .setParameter("mezzoId", mezzoId)
+                .getSingleResult();
+    }
 
 }
