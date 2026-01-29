@@ -16,6 +16,7 @@ public class UtentiDAO {
         this.em = em;
     }
 
+
     // creazione utente
     public Utenti creaUtente(String nome, String cognome) {
         Utenti utente = new Utenti(nome, cognome);
@@ -43,6 +44,14 @@ public class UtentiDAO {
 
         return true;
     }
+
+    // tutti gli utenti
+    public List<Utenti> trovaTuttiUtenti() {
+        return em.createQuery("SELECT u FROM Utenti u", Utenti.class)
+                .getResultList();
+    }
+
+
 
     // creazione tessera
     public Tessera creaTessera(Long idUtente, LocalDate emissione, LocalDate scadenza) {
@@ -86,9 +95,20 @@ public class UtentiDAO {
         return q.getResultList();
     }
 
-    // tutti gli utenti
-    public List<Utenti> trovaTuttiUtenti() {
-        return em.createQuery("SELECT u FROM Utenti u", Utenti.class)
-                .getResultList();
+
+
+    // verifica di un abbonamento in base al numero di tessera
+    public boolean verificaAbbonamentoAttivo(Long numeroTessera) {
+        TypedQuery<Long> q = em.createQuery(
+                "SELECT COUNT(t) FROM Tessera t " +
+                        "WHERE t.numeroTessera = :num " +
+                        "AND t.dataScadenza >= :oggi",
+                Long.class
+        );
+
+        q.setParameter("num", numeroTessera);
+        q.setParameter("oggi", LocalDate.now());
+
+        return q.getSingleResult() > 0;
     }
 }

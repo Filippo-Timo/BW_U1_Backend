@@ -46,6 +46,6 @@ public class Application {
 //        md.createAndSaveMezzoPubblico("CC 456 DD", tipoMezzo.TRAM);
 
         em.close();
-        shutdown();
+        entityManagerFactory.close();
     }
 }

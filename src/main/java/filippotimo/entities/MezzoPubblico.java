@@ -1,6 +1,9 @@
 package filippotimo.entities;
 
 import jakarta.persistence.*;
+
+import java.util.List;
+
 @Entity
 @Table(name = "mezzi_pubblici")
 public class MezzoPubblico {
@@ -58,6 +61,8 @@ public class MezzoPubblico {
     public void setTipoMezzo(tipoMezzo tipoMezzo) {
         this.tipoMezzo = tipoMezzo;
     }
+
+
 
     @Override
     public String toString() {

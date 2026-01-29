@@ -1,13 +1,16 @@
 package filippotimo.dao;
 
+import filippotimo.entities.Biglietto;
 import filippotimo.entities.InManutenzione;
 import filippotimo.entities.MezzoPubblico;
 import filippotimo.entities.tipoMezzo;
 import filippotimo.exceptions.NotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class MezzoPubblicoDAO {
     private final EntityManager em;
@@ -83,6 +86,26 @@ public class MezzoPubblicoDAO {
         manutenzioneDaSettare.setDataFine(dataFine);
         tr.commit();
         System.out.println("La manutenzione " + manutenzioneDaSettare + " è stata aggiornata con la data " + dataFine);
+    }
+
+    public List<InManutenzione> getListaManutenzioniPerMezzoById(long idMezzo) {
+        TypedQuery<InManutenzione> query = em.createQuery("SELECT m FROM InManutenzione m WHERE m.idMezzoPubblico.idMezzoPubblico = :idMezzo", InManutenzione.class);
+        query.setParameter("idMezzo", idMezzo);
+        List<InManutenzione> listaManutenzioni = query.getResultList();
+        if(listaManutenzioni.isEmpty()) System.out.println("Nessuna manutenzione trovata per il mezzo con ID: "+ idMezzo);
+        return listaManutenzioni;
+    }
+
+    public Long getNumeroBigliettiVidimatiPerMezzo(long idMezzo, LocalDate dataVidimazioneI, LocalDate dataVidimazioneF) {
+        TypedQuery<Long> query = em.createQuery("SELECT COUNT (b) FROM Biglietto b" +
+                " WHERE b.idMezzo.idMezzoPubblico = :idMezzo" +
+                " AND b.dataVidimazione IS NOT NULL" +
+                " AND b.dataVidimazione >= :dataVidimazioneI" +
+                " AND b.dataVidimazione <= :dataVidimazioneF ", Long.class);
+                query.setParameter("idMezzo", idMezzo);
+                query.setParameter("dataVidimazioneI", dataVidimazioneI);
+                query.setParameter("dataVidimazioneF", dataVidimazioneF);
+        return query.getSingleResult();
     }
 
 }
