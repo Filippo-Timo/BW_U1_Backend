@@ -8,7 +8,7 @@ import jakarta.persistence.Entity;
 @DiscriminatorValue("RIVENDITORE_AUTOMATICO")
 public class RivenditoreAutomatico extends Rivenditore {
 
-    @Column(name = "in_servizio", nullable = false)
+    @Column(name = "in_servizio")
     private boolean inServizio;
 
     public RivenditoreAutomatico() {

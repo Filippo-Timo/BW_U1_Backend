@@ -7,6 +7,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class Application {
 
@@ -35,20 +36,58 @@ public class Application {
         TrattaDAO td = new TrattaDAO(em);
         UtentiDAO ud = new UtentiDAO(em);
 
-        Rivenditore primoRivenditore = new RivenditoreAutomatico("Filippo", false);
+        Rivenditore primoRivenditore = new RivenditoreAutorizzato("Filippo");
+        Rivenditore secondoRivenditore = new RivenditoreAutomatico("BOT",true);
 //        rd.save(primoRivenditore);
-        Rivenditore rivPerAbbonamento = rd.findById(2);
+//        rd.save(secondoRivenditore);
+//        Rivenditore rivPerAbbonamento = rd.findById(2);
 
         MezzoPubblico primoMezzo = new MezzoPubblico("Iveco", tipoMezzo.AUTOBUS);
+        MezzoPubblico secondoMezzo = new MezzoPubblico("BOH", tipoMezzo.TRAM);
 //        md.saveMezzoPubblico(primoMezzo);
-
-        Biglietto biglietto1 = new Biglietto(LocalDate.of(2026, 1, 12), primoRivenditore, tipoMezzo.AUTOBUS, primoMezzo);
+//        md.saveMezzoPubblico(secondoMezzo);
+        Rivenditore primoRivenditoreDB = rd.findById(1);
+        Rivenditore secondoRivenditoreDB = rd.findById(2);
+        MezzoPubblico mezzo1DB = md.findMezzoById(3);
+        MezzoPubblico mezzo2DB = md.findMezzoById(4);
+        Biglietto biglietto1 = new Biglietto(LocalDate.of(2026, 1, 12), primoRivenditoreDB, tipoMezzo.AUTOBUS);
+        Biglietto biglietto2 = new Biglietto(LocalDate.of(2026, 1, 29), secondoRivenditoreDB, tipoMezzo.TRAM);
 //        pd.save(biglietto1);
+//        pd.save(biglietto2);
 
 
         Utenti primoUtente = new Utenti("Marcello", "Lippi");
+        Utenti secondoUtente = new Utenti("Roberto", "Mancini");
+//        pd.validateATicketBySetter(2,3);
+//        long result = md.getNumeroBigliettiVidimatiPerMezzo(2,LocalDate.of(2026,1,28),LocalDate.of(2026,1,30));
+//        System.out.println(result);
+        Tratta tratta1 = new Tratta("Linea A","Pomezia","Tor San Lorenzo",25);
+//        td.saveTratta(tratta1);
+//        td.createAndSaveTratta("Linea C","Torvajanica","Tor San Lorenzo",20);
+        Tratta tratta1DB = td.findTrattaById(1);
+        Tratta tratta2DB = td.findTrattaById(2);
+//        td.removeTratta(3);
+//        td.createAndSavePercorrenza(18, tratta1DB,mezzo1DB);
+//        td.createAndSavePercorrenza(18, tratta2DB,mezzo2DB);
+        System.out.println(td.tempoMedioPerMezzoETratta(3,1));
+//        System.out.println(td.numeroPercorrenzePerMezzoETratta(1,1));
+        List<Percorrenza> listaTempiEffett = td.getListaTempiPercorrenzaEffettivi(3,1);
+        listaTempiEffett.forEach(percorrenza -> System.out.println(percorrenza));
+
 //        ud.save(primoUtente);
-        Tessera tesseraPerAbbonamento = ud.findTesseraByNumero(2);
+//        ud.save(secondoUtente);
+//        rd.removeById(3);
+//        rd.setInServizioRivenditoreAutomatico(4,false);
+//        List<Rivenditore> lista = rd.findAll();
+//        lista.forEach(r-> System.out.println(r));
+//        md.mandaInManutenzione(3);
+//        md.mandaInManutenzione(4);
+//        md.setDataFineManutenzione(1,LocalDate.of(2025,1,30));
+//        md.setDataFineManutenzione(3,LocalDate.of(2025,1,31));
+//        List<InManutenzione> listaManutenzioniVeicolo = md.getListaManutenzioniPerMezzoById(3);
+//        listaManutenzioniVeicolo.forEach(m-> System.out.println(m));
+
+//        Tessera tesseraPerAbbonamento = ud.findTesseraByNumero(2);
 //        ud.createAndSaveTessera(primoUtente, LocalDate.of(2025, 12, 6));
 //        Utenti sirLippi = ud.findUtenteById(3);
 //        ud.createAndSaveTessera(sirLippi, LocalDate.of(2026, 1, 12));

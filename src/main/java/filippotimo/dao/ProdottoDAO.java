@@ -34,7 +34,7 @@ public class ProdottoDAO {
 
     public void createAndSaveBiglietto(LocalDate dataEmissione, Rivenditore idRivenditore, tipoMezzo tipoMezzo, MezzoPubblico idMezzo) {
 
-        Biglietto newBiglietto = new Biglietto(dataEmissione, idRivenditore, tipoMezzo, idMezzo);
+        Biglietto newBiglietto = new Biglietto(dataEmissione, idRivenditore, tipoMezzo);
 
         EntityTransaction transaction = em.getTransaction();
         transaction.begin();
@@ -117,14 +117,17 @@ public class ProdottoDAO {
 
     //    *************************************** METODO PER VIDIMARE UN BIGLIETTO ***************************************
     
-    public void validateATicketBySetter(long idBiglietto) {
+    public void validateATicketBySetter(long idBiglietto, long idMezzo) {
         EntityTransaction tr = em.getTransaction();
+        MezzoPubblicoDAO md = new MezzoPubblicoDAO(em);
         LocalDate today = LocalDate.now();
         tr.begin();
         Biglietto bigliettoDaVidimare = (Biglietto) findById(idBiglietto);
         bigliettoDaVidimare.setDataVidimazione(today);
+        MezzoPubblico mezzoTrovato = md.findMezzoById(idMezzo);
+        bigliettoDaVidimare.setIdMezzo(mezzoTrovato);
         tr.commit();
-        System.out.println("La vidimazione del biglietto " + bigliettoDaVidimare + " è stata aggiornato con la data " + today.toString());
+        System.out.println("La vidimazione del biglietto " + bigliettoDaVidimare + " è avvenuta in data " + today.toString() + " sul mezzo: " + mezzoTrovato);
     }
 
     //    *************************************** COUNT IL NUMERO DI BIGLIETTI VIDIMATI IN UN DETERMINATO LASSO DI TEMPO ***************************************

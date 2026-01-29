@@ -22,12 +22,13 @@ public class Percorrenza {
    private MezzoPubblico idMezzo;
 
 
-   protected Percorrenza(){}
+   public Percorrenza(){}
 
 
-    protected Percorrenza(int tempoPercorrenzaEffettivo, Tratta tratta){
+    public Percorrenza(int tempoPercorrenzaEffettivo, Tratta tratta, MezzoPubblico idMezzo){
        this.tempoPercorrenzaEffettivo=tempoPercorrenzaEffettivo;
        this.tratta=tratta;
+       this.idMezzo=idMezzo;
     }
 
     public int getTempoPercorrenzaEffettivo() {
