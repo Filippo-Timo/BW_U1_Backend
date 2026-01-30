@@ -49,7 +49,7 @@ public class ProdottoDAO {
 
     //    *************************************** CREATE AND SAVE (abbonamento) ***************************************
 
-    public void createAndSaveAbbonamento(LocalDate dataEmissione, Rivenditore idRivenditore, LocalDate dataScadenza, durataAbbonamento durataAbbonamento, Tessera idTessera) {
+    public void createAndSaveAbbonamento(LocalDate dataEmissione, Rivenditore idRivenditore, durataAbbonamento durataAbbonamento, Tessera idTessera) {
 
         Abbonamento newAbbonamento = new Abbonamento(dataEmissione, idRivenditore, durataAbbonamento, idTessera);
 
@@ -90,7 +90,7 @@ public class ProdottoDAO {
         System.out.println("Il prodotto con id = " + idProdotto + " è stato eliminato correttamente");
     }
 
-    //    *************************************** FIND ALL ABBONAMENTI E BIGLIETTI IN UN DETERMINATO LASSO DI TEMPO ***************************************
+    //    *************************************** FIND ALL ABBONAMENTI E BIGLIETTI IN UN DETERMINATO LASSO DI TEMPO PER RIVENDITORE ***************************************
 
     public List<Prodotto> findAllInAPeriodOfTime(long idRivenditore, LocalDate dataDiPartenza, LocalDate dataDiFine) {
 
@@ -103,7 +103,7 @@ public class ProdottoDAO {
         return result.getResultList();
     }
 
-    //    *************************************** COUNT ABBONAMENTI E BIGLIETTI IN UN DETERMINATO LASSO DI TEMPO ***************************************
+    //    *************************************** COUNT ABBONAMENTI E BIGLIETTI IN UN DETERMINATO LASSO DI TEMPO PER RIVENDITORE ***************************************
 
     public long countAllProductsInAPeriodOfTime(long idRivenditore, LocalDate dataDiPartenza, LocalDate dataDiFine) {
 
@@ -116,7 +116,7 @@ public class ProdottoDAO {
     }
 
     //    *************************************** METODO PER VIDIMARE UN BIGLIETTO ***************************************
-    
+
     public void validateATicketBySetter(long idBiglietto, long idMezzo) {
         EntityTransaction tr = em.getTransaction();
         MezzoPubblicoDAO md = new MezzoPubblicoDAO(em);

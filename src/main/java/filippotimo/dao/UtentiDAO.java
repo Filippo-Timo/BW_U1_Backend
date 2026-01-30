@@ -9,6 +9,7 @@ import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class UtentiDAO {
 
@@ -119,12 +120,12 @@ public class UtentiDAO {
 
     //    *************************************** VERIFY Abbonamento BY Tessera ***************************************
 
-    public Abbonamento verifyAbbonamentoByTessera(long numeroTessera) {
+    public List<Abbonamento> verifyAbbonamentoByTessera(long numeroTessera) {
         TypedQuery<Abbonamento> a = em.createQuery("SELECT a FROM Abbonamento a WHERE a.numeroTessera.numeroTessera = :numeroTessera", Abbonamento.class);
 
         a.setParameter("numeroTessera", numeroTessera);
 
-        return a.getSingleResult();
+        return a.getResultList();
     }
 
 }
