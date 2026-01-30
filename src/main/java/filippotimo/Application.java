@@ -146,9 +146,11 @@ public class Application {
 
         // Questo metodo restituisce una lista di prodotti
         List<Prodotto> listaProdottiEmessi = pd.findAllInAPeriodOfTime(1, LocalDate.of(2025, 1, 15), LocalDate.now());
-
-        listaProdottiEmessi.forEach(System.out::println);
-
+        if (listaProdottiEmessi.isEmpty()) {
+            System.out.println("Nessun prodotto trovato");
+        } else {
+            listaProdottiEmessi.forEach(System.out::println);
+        }
 
         //    ******************************* IMPOSTARE UN RIVENDITORE AUTOMATICO COME IN SERVIZIO / FUORI SERVIZIO *******************************
 
@@ -158,9 +160,11 @@ public class Application {
         //    ************************************ VERIFICARE VALIDITÀ ABBONAMENTO IN BASE AL NUMERO DI TESSERA  ************************************
 
         List<Abbonamento> abbonamentoVerificato = ud.verifyAbbonamentoByTessera(2);
-
-        abbonamentoVerificato.forEach(System.out::println);
-
+        if (abbonamentoVerificato.isEmpty()) {
+            System.out.println("Nessun abbonamento trovato");
+        } else {
+            abbonamentoVerificato.forEach(System.out::println);
+        }
 
         //    ************************************ TRACCIARE LE MANUTENZIONI DI UN MEZZO  ************************************
 
@@ -171,8 +175,24 @@ public class Application {
 
         //    ************************************ NUMERO DI BIGLIETTI VIDIMATI SU UN MEZZO IN UN PERIODO DI TEMPO ************************************
 
+        // Ritorna il NUMERO di biglietti vidimati in un determinato lasso di tempo per un determinato mezzo specificato tramite ID
         long VidimazioniPerMezzoInUnLassoDiTempo = md.getNumeroBigliettiVidimatiPerMezzo(1, LocalDate.of(2025, 1, 5), LocalDate.of(2026, 1, 30));
         System.out.println(VidimazioniPerMezzoInUnLassoDiTempo);
+
+
+        //    *************************************** COUNT / FIND NUMERO DI BIGLIETTI VIDIMATI IN UN DETERMINATO LASSO DI TEMPO ***************************************
+
+        // Ritorna il NUMERO di biglietti vidimati in un determinato lasso di tempo
+        long numeroBigliettiVidimatiPerTempo = pd.countAllValidatesInAPeriodOfTime(LocalDate.of(2025, 1, 1), LocalDate.of(2026, 12, 31));
+        System.out.println(numeroBigliettiVidimatiPerTempo);
+
+        // Ritorna la LISTA di biglietti vidimati in un determinato lasso di tempo
+        List<Biglietto> listaBigliettiVidimatiPerTempo = pd.findAllValidatesInAPeriodOfTime(LocalDate.of(2025, 1, 1), LocalDate.of(2026, 12, 31));
+        if (listaBigliettiVidimatiPerTempo.isEmpty()) {
+            System.out.println("Nessun biglietto trovato");
+        } else {
+            listaBigliettiVidimatiPerTempo.forEach(System.out::println);
+        }
 
 
         //    ************************************ NUMERO DI PERCORRENZE PER MEZZO E TRATTA ************************************
@@ -185,86 +205,18 @@ public class Application {
         //    ************************************ LISTA DEI TEMPI DI PERCORRENZA EFFETTIVI PER MEZZO E TRATTA ************************************
 
         List<Percorrenza> listaTempiEffettivi = td.getListaTempiPercorrenzaEffettivi(1, 1);
-
-        listaTempiEffettivi.forEach(System.out::println);
+        if (listaTempiEffettivi.isEmpty()) {
+            System.out.println("Nessuna lista con tempi di percorrenza trovata");
+        } else {
+            listaTempiEffettivi.forEach(System.out::println);
+        }
 
 
         //    ************************************ TEMPO MEDIO DI PERCORRENZA EFFETTIVO DI UN MEZZO SU UNA TRATTA ************************************
 
         double tempoMedioEffettivo = td.tempoMedioPerMezzoETratta(1, 1);
 
-
-//        Rivenditore rivPerAbbonamento = rd.findById(2);
-
-
-//        pd.validateATicketBySetter(2,3);
-
-
-        System.out.println(td.tempoMedioPerMezzoETratta(3, 1));
-//        System.out.println();
-        List<Percorrenza> listaTempiEffett = td.getListaTempiPercorrenzaEffettivi(3, 1);
-        listaTempiEffett.forEach(percorrenza -> System.out.println(percorrenza));
-
-
-//        rd.removeById(3);
-//        rd.setInServizioRivenditoreAutomatico(4,false);
-//        List<Rivenditore> lista = rd.findAll();
-//        lista.forEach(r-> System.out.println(r));
-
-
-//        List<InManutenzione> listaManutenzioniVeicolo = md.getListaManutenzioniPerMezzoById(3);
-//        listaManutenzioniVeicolo.forEach(m-> System.out.println(m));
-
-//        Tessera tesseraPerAbbonamento = ud.findTesseraByNumero(2);
-//        ud.createAndSaveTessera(primoUtente, LocalDate.of(2025, 12, 6));
-//        Utenti sirLippi = ud.findUtenteById(3);
-//        ud.createAndSaveTessera(sirLippi, LocalDate.of(2026, 1, 12));
-//        ud.findUtenteByIdAndDelete(2);
-
-//        Prodotto diClaudione = pd.findById(3);
-
-//        List<Prodotto> test1 = pd.findAllInAPeriodOfTime(2, LocalDate.of(2024, 12, 3), LocalDate.of(2029, 2, 23));
-//        if (test1.isEmpty()) {
-//            System.out.println("Nessun prodotto");
-//        } else {
-//            test1.forEach(System.out::println);
-//        }
-
-//        long test1 = pd.countAllProductsInAPeriodOfTime(2, LocalDate.of(2029, 12, 3), LocalDate.of(2029, 2, 23));
-//        if (test1 == 0) {
-//            System.out.println("Nessun prodotto");
-//        } else {
-//            System.out.println(test1);
-//            ;
-//        }
-
-//        Biglietto bigliettoDaValidare = (Biglietto) pd.findById(1);
-//        pd.validateATicketBySetter(1);
-
-//        long testNumeroBigliettiVidimati = pd.countAllValidatesInAPeriodOfTime(LocalDate.of(2023, 12, 3), LocalDate.of(2029, 2, 23));
-//        if (testNumeroBigliettiVidimati == 0) {
-//            System.out.println("Nessun prodotto trovato");
-//        } else {
-//            System.out.println("Il numero di biglietti vidimati nel lasso di tempo inserito è: " + testNumeroBigliettiVidimati);
-//            ;
-//        }
-
-//        List<Biglietto> testListaBigliettiVidimati = pd.findAllValidatesInAPeriodOfTime(LocalDate.of(2024, 12, 3), LocalDate.of(2029, 2, 23));
-//        if (testListaBigliettiVidimati.isEmpty()) {
-//            System.out.println("Nessun prodotto");
-//        } else {
-//            testListaBigliettiVidimati.forEach(System.out::println);
-//        }
-
-//        System.out.println(diClaudione);
-//        Abbonamento ciaone = ud.verifyAbbonamentoByTessera(2);
-//        System.out.println(ciaone);
-
-
-//        MezzoPubblico primoMezzo = new MezzoPubblico("AA 123 BB", tipoMezzo.AUTOBUS);
-//        md.saveMezzoPubblico(primoMezzo);
-
-//        md.createAndSaveMezzoPubblico("CC 456 DD", tipoMezzo.TRAM);
+        System.out.println(tempoMedioEffettivo);
 
 
         //    *************************************** Esempio di menù strutturato come avevamp pensato ***************************************

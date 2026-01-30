@@ -130,7 +130,7 @@ public class ProdottoDAO {
         System.out.println("La vidimazione del biglietto " + bigliettoDaVidimare + " è avvenuta in data " + today.toString() + " sul mezzo: " + mezzoTrovato);
     }
 
-    //    *************************************** COUNT IL NUMERO DI BIGLIETTI VIDIMATI IN UN DETERMINATO LASSO DI TEMPO ***************************************
+    //    *************************************** COUNT NUMERO DI BIGLIETTI VIDIMATI IN UN DETERMINATO LASSO DI TEMPO ***************************************
 
     public long countAllValidatesInAPeriodOfTime(LocalDate dataDiPartenza, LocalDate dataDiFine) {
 
