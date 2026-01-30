@@ -32,7 +32,7 @@ public class Application {
 
         MezzoPubblicoDAO md = new MezzoPubblicoDAO(em);
         ProdottoDAO pd = new ProdottoDAO(em);
-        RivenditoriDAO rd = new RivenditoriDAO();
+        RivenditoriDAO rd = new RivenditoriDAO(em);
         TrattaDAO td = new TrattaDAO(em);
         UtentiDAO ud = new UtentiDAO(em);
 
