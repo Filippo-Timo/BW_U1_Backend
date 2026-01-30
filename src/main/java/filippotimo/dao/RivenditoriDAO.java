@@ -12,28 +12,27 @@ import jakarta.persistence.NoResultException;
 import java.util.List;
 
 public class RivenditoriDAO {
-	private final EntityManagerFactory emf = Application.getEntityManagerFactory();
+	private final EntityManager em;
+
+	public RivenditoriDAO(EntityManager em) {
+		this.em = em;
+	}
 
 	public void save(Rivenditore r) {
-		final EntityManager em = emf.createEntityManager();
 		final EntityTransaction t = em.getTransaction();
 
 		t.begin();
 		em.persist(r);
 		t.commit();
 
-		em.close();
 	}
 
 	public Rivenditore findById(long id) {
-		final EntityManager em = emf.createEntityManager();
 		final Rivenditore r = em.find(Rivenditore.class, id);
-		em.close();
 		return r;
 	}
 
 	public void removeById(long id) {
-		final EntityManager em = emf.createEntityManager();
 		final EntityTransaction t = em.getTransaction();
 
 		t.begin();
@@ -42,12 +41,9 @@ public class RivenditoriDAO {
 			em.remove(r);
 		}
 		t.commit();
-
-		em.close();
 	}
 
 	public void remove(Rivenditore r) {
-		final EntityManager em = emf.createEntityManager();
 		final EntityTransaction t = em.getTransaction();
 
 		t.begin();
@@ -55,29 +51,24 @@ public class RivenditoriDAO {
 			em.remove(r);
 		}
 		t.commit();
-
-		em.close();
 	}
 
 	public List<Rivenditore> findAll() {
-		final EntityManager em = emf.createEntityManager();
 		final List<Rivenditore> list = em
 			.createQuery("SELECT r FROM Rivenditore r", Rivenditore.class)
 			.getResultList();
-		em.close();
 		return list;
 	}
 
 	public void setInServizioRivenditoreAutomatico(long idRivenditore, boolean inServizio) {
-		final EntityManager em = emf.createEntityManager();
 		final EntityTransaction t = em.getTransaction();
 
 		try {
 			final RivenditoreAutomatico rivenditore = em
 				.createQuery(
-					"SELECT r FROM RivenditoreAutomatico r WHERE r.id = :id",
-					RivenditoreAutomatico.class
-				)
+						"SELECT r FROM RivenditoreAutomatico r WHERE r.id = :id",
+						RivenditoreAutomatico.class
+					    )
 				.setParameter("id", idRivenditore)
 				.getSingleResult();
 
@@ -86,8 +77,6 @@ public class RivenditoriDAO {
 			t.commit();
 		} catch (NoResultException ex) {
 			throw new NotFoundException("Rivenditore automatico con id " + idRivenditore + " non trovato!");
-		} finally {
-			em.close();
-		}
+		} 
 	}
 }
